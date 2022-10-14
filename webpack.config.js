@@ -1,37 +1,60 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const CompressionWebpackPlugin = require("compression-webpack-plugin");
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-
+const packageJson = require("./package.json")
 module.exports = {
-    output: {
-        path: path.join(__dirname, "/dist"), // the bundle output path
-        filename: "bundle.js", // the name of the bundle
-    },
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: "src/index.html", // to import index.html file inside index.js
-        }),
-    ],
+    mode: "development",
     devServer: {
-        port: 3030, // you can change the port
+        port: 8006,
+        historyApiFallback: {
+            index: '/index.html'
+        }
     },
+    entry: path.resolve(__dirname, './src/index.js'),
+
+    plugins: [
+        new CompressionWebpackPlugin({
+            algorithm: "gzip"
+        }),
+        new HtmlWebpackPlugin({
+            template: './public/index.html'
+        }),
+        new ModuleFederationPlugin(
+            {
+                name: 'loyalty',
+                filename:
+                    'remoteEntry.js',
+                exposes: {
+                    './loyaltyCard':
+                        './src/index',
+                },
+                shared: packageJson.dependencies
+            }
+        ),
+    ],
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/, // .js and .jsx files
-                exclude: /node_modules/, // excluding the node_modules folder
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
+                    options: {
+                        presets: ['@babel/env', '@babel/preset-react'],
+                        plugins: ['@babel/plugin-transform-runtime']
+                    },
                 },
+
             },
             {
                 test: /\.(sa|sc|c)ss$/, // styles files
-                use: ["style-loader", "css-loader", "sass-loader"],
-            },
-            {
-                test: /\.(png|woff|woff2|eot|ttf|svg)$/, // to import images and fonts
-                loader: "url-loader",
-                options: { limit: false },
-            },
-        ],
-    },
-};
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
+            }
+        ]
+    }
+}
