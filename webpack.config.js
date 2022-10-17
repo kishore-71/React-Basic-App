@@ -29,11 +29,7 @@ module.exports = {
                     './App': './src/App.js',
                 },
                 shared: {
-                    react: {
-                       
-                        singleton:true
-                    },
-                    'react-dom': { singleton: true }
+                   
                 }
             }
         ),
