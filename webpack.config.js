@@ -22,7 +22,7 @@ module.exports = {
         }),
         new ModuleFederationPlugin(
             {
-                name: 'loyalty',
+                name: 'app',
                 filename:
                     'remoteEntry.js',
                 exposes: {
