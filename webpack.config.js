@@ -30,7 +30,7 @@ module.exports = {
                 },
                 shared: {
                     react: {
-                        eager: true,
+                       
                         singleton:true
                     },
                     'react-dom': { singleton: true }
