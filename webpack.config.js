@@ -26,12 +26,14 @@ module.exports = {
                 filename:
                     'remoteEntry.js',
                 exposes: {
-                    './Newapp': './src/App.js',
+                    './App': './src/App.js',
                 },
                 shared: {
                     react: {
-                        eager: true
-                    }
+                        eager: true,
+                        singleton:true
+                    },
+                    'react-dom': { singleton: true }
                 }
             }
         ),
