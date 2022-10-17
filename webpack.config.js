@@ -26,7 +26,7 @@ module.exports = {
                 filename:
                     'remoteEntry.js',
                 exposes: {
-                    './Newapp': './src/index.js',
+                    './Newapp': './src/App.js',
                 },
                 shared: {
                     react: {
